@@ -1,0 +1,16 @@
+/Simple Banking System/task/build/
+/.gradle/
+/gradle/
+/Problems/**/out/
+/Simple Banking System/task/out/
+/.idea/frameworkLessonHistory/
+/**/*.iml
+/**/*.html
+/**/*.txt
+/**/*.yaml
+/**/*.css
+/**/*.bat
+/**/*.jar
+/**/*.properties
+/**/*.xml
+/out/
