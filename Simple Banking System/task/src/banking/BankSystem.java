@@ -18,7 +18,7 @@ public class BankSystem {
 
     public long generateCard (Random random) {
         String bin = "400000";
-        return Long.parseLong(String.valueOf(bin) + (random.nextInt(800000000) + 100000000) + random.nextInt(9));
+        return Long.parseLong(bin + (random.nextInt(800000000) + 100000000) + random.nextInt(9));
     }
 
     public long getCard() {
