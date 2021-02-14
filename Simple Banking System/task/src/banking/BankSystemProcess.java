@@ -6,7 +6,7 @@ public class BankSystemProcess {
     public void menu (DataBase connect) {
         BankSystem account1 = new BankSystem();
         while (true) {
-            System.out.print("1. Create an account\n2. Log into account\n0. Exit\n3. View dataset\n");
+            System.out.print("1. Create an account\n2. Log into account\n0. Exit\n");
             int input = Integer.parseInt(input());
             switch (input) {
                 case 1:
@@ -20,9 +20,9 @@ public class BankSystemProcess {
                     long card = Long.parseLong(input());
                     System.out.print("Enter your PIN: \n");
                     int pin = Integer.parseInt(input());
-                    if (login(account1, card, pin)) {
+                    if (connect.login(card, pin)) {
                         System.out.print("You have successfully logged in!\n");
-                        logged(account1);
+                        logged(connect, card);
                     } else {
                         System.out.print("Wrong card number or PIN!\n");
                     }
@@ -42,24 +42,58 @@ public class BankSystemProcess {
         }
     }
 
-    public boolean login (BankSystem account, long card, int pin) {
-        return card == account.getCard() && pin == account.getPin();
-    }
-
-    public void logged (BankSystem account) {
+    public void logged (DataBase connect, long account) {
         while (true) {
-            System.out.print("1. Balance\n2. Log out\n0. Exit\n");
+            System.out.print("1. Balance\n2. Add income\n" +
+                    "3. Do transfer\n" +
+                    "4. Close account\n" +
+                    "5. Log out\n" +
+                    "0. Exit\n");
             int input = Integer.parseInt(input());
             switch (input) {
                 case 1:
-                    System.out.print("Balance: " + account.getBalance() + "\n");
+                    System.out.printf("Balance: %d%n", connect.viewBalance(account));
                     break;
                 case 2:
+                    System.out.print("Enter income:\n");
+                    int income = Integer.parseInt(input());
+                    int newBalance = income + connect.viewBalance(account);
+                    connect.addIncome(account, newBalance);
+                    System.out.print("Income was added!\n");
+                    break;
+                case 3:
+                    System.out.print("Transfer\nEnter card number:\n");
+                    long toCard = Long.parseLong(input());
+                    if ((BankSystem.checkCardLuhn(toCard) || toCard == 2222222222222222L) && toCard != account && connect.cardExist(toCard)) {
+                        System.out.print("Enter how much money you want to transfer:\n");
+                        int transferSum = Integer.parseInt(input());
+                        if (transferSum < connect.viewBalance(account)) {
+                            connect.makeTransfer(account, toCard, transferSum);
+                            System.out.print("Success!\n");
+                        } else {
+                            System.out.print("Not enough money!\n");
+                        }
+                    } else if (toCard == account) {
+                        System.out.print("You can't transfer money to the same account!\n");
+                    } else if (!BankSystem.checkCardLuhn(toCard)) {
+                        System.out.print("Probably you made a mistake in the card number. Please try again!\n");
+                    } else if (!connect.cardExist(toCard)) {
+                        System.out.print("Such a card does not exist.\n");
+                    } else {
+                        System.out.print("Probably you made a mistake in the card number. Please try again!\n");
+                    }
+                    break;
+                case 4:
+                    connect.deleteAccount(account);
+                    System.out.print("The account has been closed!\n");
+                    input = 5;
+                    break;
+                case 5:
                 case 0:
                     break;
 
             }
-            if (input == 2 || input == 0) {
+            if (input == 5 || input == 0) {
                 break;
             }
         }

@@ -51,6 +51,28 @@ public class BankSystem {
         return Long.parseLong(card + checkSum);
     }
 
+    public static boolean checkCardLuhn (long account) {
+        String card = String.valueOf(account);
+        int checkSum;
+        int sum = 0;
+        String[] cardArray = card.split("");
+
+        for (int i = 0; i < cardArray.length - 1; i++) {
+            if (i % 2 == 0) {
+                if (Integer.parseInt(cardArray[i]) * 2 > 9){
+                    sum += Integer.parseInt(cardArray[i]) * 2 - 9;
+                } else {
+                    sum += Integer.parseInt(cardArray[i]) * 2;
+                }
+            } else {
+                sum += Integer.parseInt(cardArray[i]);
+            }
+        }
+        //System.out.println(sum);
+        //System.out.println(sum % 10);
+        return (sum + Integer.parseInt(cardArray[cardArray.length - 1])) % 10 == 0;
+    }
+
     public long getCard() {
         return this.card;
     }
