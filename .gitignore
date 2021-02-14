@@ -14,3 +14,4 @@
 /**/*.properties
 /**/*.xml
 /out/
+/Simple Banking System/task/src/banking/db/card.s3db

@@ -3,16 +3,17 @@ package banking;
 import java.util.Scanner;
 
 public class BankSystemProcess {
-    public void menu () {
+    public void menu (DataBase connect) {
         BankSystem account1 = new BankSystem();
         while (true) {
-            System.out.print("1. Create an account\n2. Log into account\n0. Exit\n");
+            System.out.print("1. Create an account\n2. Log into account\n0. Exit\n3. View dataset\n");
             int input = Integer.parseInt(input());
             switch (input) {
                 case 1:
                     account1.createAccount();
                     System.out.print("Your card number: \n" + account1.getCard() + "\n");
                     System.out.print("Your card PIN: \n" + account1.getPin() + "\n");
+                    connect.insertAccount(account1.getCard(), account1.getPin(), account1.getBalance());
                     break;
                 case 2:
                     System.out.print("Enter your card number: \n");
@@ -25,6 +26,9 @@ public class BankSystemProcess {
                     } else {
                         System.out.print("Wrong card number or PIN!\n");
                     }
+                    break;
+                case 3:
+                    connect.selectAll();
                     break;
                 case 0:
                     break;
